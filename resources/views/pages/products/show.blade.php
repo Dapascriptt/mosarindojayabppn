@@ -1,5 +1,14 @@
 @extends('layouts.app')
-@section('title', data_get($product, 'name'))
+@php
+  $productTitle = data_get($product, 'name');
+  $productDesc = data_get($product, 'excerpt', '');
+  $productMeta = \Illuminate\Support\Str::limit(trim(strip_tags($productDesc)), 155, '');
+@endphp
+@section('title', $productTitle . ' | Mosarindo Balikpapan')
+@section('meta_description', $productMeta ?: 'Katalog produk supply Balikpapan untuk kebutuhan proyek dan instansi. Detail spesifikasi tersedia.')
+@section('canonical', url()->current())
+@section('meta_image', asset('image/hero1.png'))
+@section('meta_robots', 'index, follow')
 
 @section('content')
 @php

@@ -1,5 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Tentang Kami')
+@section('title', 'Tentang Kami | Mosarindo Balikpapan')
+@section('meta_description', 'Profil Mosarindo Jaya Balikpapan: legalitas, tenaga ahli, dan standar kerja profesional untuk proyek konstruksi, MEP, interior, dan supply.')
+@section('canonical', url()->current())
+@section('meta_image', asset('image/logo-mjb.png'))
+@section('meta_robots', 'index, follow')
 
 @section('content')
 @php
@@ -17,6 +21,7 @@
   $sbuItems = data_get($about, 'sbu_items', []);
   $teamGroups = data_get($about, 'team_groups', []);
   $certText = data_get($about, 'certifications_text');
+  $locationPhotos = data_get($about, 'location_photos', []);
   $videoSrc = $resolveMedia(data_get($about, 'video_url', '/videos/about-us.mp4'));
 @endphp
 <section class="relative overflow-hidden bg-slate-950 text-white w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
@@ -46,6 +51,43 @@
 </section>
 
 <section class="mx-auto max-w-6xl px-6">
+  @if (!empty($locationPhotos))
+    <section class="mt-10 space-y-4">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Foto Lokasi</h2>
+          <p class="text-sm sm:text-base text-slate-600">
+            Dokumentasi lokasi dan fasilitas proyek yang kami tangani.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" class="location-prev grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 transition">
+            <span class="sr-only">Sebelumnya</span>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button type="button" class="location-next grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 transition">
+            <span class="sr-only">Berikutnya</span>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-3xl bg-slate-100">
+        <div class="location-track flex transition-transform duration-500">
+          @foreach ($locationPhotos as $photo)
+            <div class="min-w-full">
+              <img src="{{ $resolveMedia($photo) }}" alt="Foto lokasi" class="h-[320px] w-full object-cover sm:h-[380px]">
+            </div>
+          @endforeach
+        </div>
+      </div>
+    </section>
+  @endif
+
   <div class="mt-10 space-y-3">
 
     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Tentang Kami</h2>
@@ -201,6 +243,30 @@
 
   els.forEach(el => io.observe(el));
 })();
+
+// Slider foto lokasi
+(() => {
+  const track = document.querySelector('.location-track');
+  if (!track) return;
+  const slides = Array.from(track.children);
+  let idx = 0;
+
+  const update = () => {
+    track.style.transform = `translateX(-${idx * 100}%)`;
+  };
+
+  const next = () => {
+    idx = (idx + 1) % slides.length;
+    update();
+  };
+
+  const prev = () => {
+    idx = (idx - 1 + slides.length) % slides.length;
+    update();
+  };
+
+  document.querySelector('.location-next')?.addEventListener('click', next);
+  document.querySelector('.location-prev')?.addEventListener('click', prev);
+})();
 </script>
 @endpush
-

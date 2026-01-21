@@ -11,6 +11,7 @@ class AboutPage extends Model
         'hero_subtitle',
         'hero_desc',
         'video_url',
+        'location_photos',
         'highlights',
         'legal_items',
         'sbu_items',
@@ -19,6 +20,7 @@ class AboutPage extends Model
     ];
 
     protected $casts = [
+        'location_photos' => 'array',
         'highlights' => 'array',
         'legal_items' => 'array',
         'sbu_items' => 'array',

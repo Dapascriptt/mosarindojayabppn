@@ -34,6 +34,7 @@ class GalleryItemResource extends Resource
                     ->label('Foto')
                     ->image()
                     ->multiple()
+                    ->reorderable()
                     ->disk('public')
                     ->directory('gallery')
                     ->columnSpanFull(),

@@ -9,8 +9,14 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::orderBy('created_at')->get();
+        $groups = $products->groupBy(function ($product) {
+            return $product->type ?: 'mjb-kontraktor';
+        });
 
-        return view('pages.products.index', compact('products'));
+        return view('pages.products.index', [
+            'products' => $products,
+            'groups' => $groups,
+        ]);
     }
 
     public function show(string $slug)

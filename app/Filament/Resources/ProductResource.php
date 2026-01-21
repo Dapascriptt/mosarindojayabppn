@@ -33,6 +33,13 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true),
+                        Forms\Components\Select::make('type')
+                            ->label('Tipe')
+                            ->options([
+                                'mjb-kontraktor' => 'MJB Kontraktor',
+                                'mjb-food' => 'MJB Food',
+                            ])
+                            ->required(),
                         Forms\Components\TextInput::make('category')
                             ->label('Kategori'),
                         Forms\Components\Textarea::make('excerpt')

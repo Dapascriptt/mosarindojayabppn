@@ -1,5 +1,14 @@
 @extends('layouts.app')
-@section('title', data_get($service, 'name'))
+@php
+  $serviceTitle = data_get($service, 'name');
+  $serviceDesc = data_get($service, 'short_desc', '');
+  $serviceMeta = \Illuminate\Support\Str::limit(trim(strip_tags($serviceDesc)), 155, '');
+@endphp
+@section('title', $serviceTitle . ' | Mosarindo Balikpapan')
+@section('meta_description', $serviceMeta ?: 'Layanan konstruksi dan supply Balikpapan untuk proyek B2B dan instansi. Konsultasi dan perencanaan profesional.')
+@section('canonical', url()->current())
+@section('meta_image', asset('image/hero1.png'))
+@section('meta_robots', 'index, follow')
 
 @section('content')
 @php

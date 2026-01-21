@@ -1,5 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Beranda')
+@section('title', 'Kontraktor & Supplier Balikpapan | Mosarindo')
+@section('meta_description', 'Mosarindo Jaya Balikpapan menyediakan jasa konstruksi, MEP, interior, renovasi, serta supply material alam dan daging ayam untuk proyek dan instansi.')
+@section('canonical', url()->current())
+@section('meta_image', asset('image/hero1.png'))
+@section('meta_robots', 'index, follow')
 
 @section('content')
 {{-- HERO SLIDER FULL BLEED --}}
@@ -27,19 +31,19 @@
       'media' => asset('image/hero1.png'),
       'title' => 'Kontraktor & Supply Konstruksi',
       'subtitle' => 'Tepat Waktu. Terukur. Profesional.',
-      'desc' => 'Showroom, konstruksi, interior, electrical, supply material, dan land clearing dengan pengawasan mutu, standar K3, serta komitmen tepat waktu.',
+      'desc' => 'Kontraktor Balikpapan untuk konstruksi bangunan, MEP, interior, dan supply material alam. Siap mendukung tender proyek dan instansi.',
     ],
     [
       'media' => asset('image/hero2.png'),
       'title' => 'Eksekusi Lapangan yang Rapi',
       'subtitle' => 'Workflow jelas & dokumentasi progres.',
-      'desc' => 'Mulai survey, RAB, eksekusi, QC hingga serah terima dengan kontrol mutu dan keselamatan.',
+      'desc' => 'Jasa konstruksi Balikpapan dengan alur kerja terukur: survey, RAB, eksekusi, QC hingga serah terima.',
     ],
     [
-      'media' => asset('image/hero3.png'),
+      'media' => asset('image/hero1.png'),
       'title' => 'Supply Material Terencana',
       'subtitle' => 'Rantai pasok kuat untuk kebutuhan proyek.',
-      'desc' => 'Pengadaan material termasuk batu split Palu dengan spesifikasi tepat dan pengiriman on-time.',
+      'desc' => 'Supplier material alam Balikpapan termasuk pasir dan batu split Palu dengan spesifikasi tepat dan pengiriman on-time.',
     ],
   ];
 
@@ -82,10 +86,17 @@
 
         <div class="relative flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
           <div class="max-w-4xl text-center">
-            <h1 class="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.1] tracking-tight">
-              {{ $s['title'] }}
-              <span class="block text-[rgba(219,165,84,1)]">{{ $s['subtitle'] }}</span>
-            </h1>
+            @if ($i === 0)
+              <h1 class="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.1] tracking-tight">
+                {{ $s['title'] }}
+                <span class="block text-[rgba(219,165,84,1)]">{{ $s['subtitle'] }}</span>
+              </h1>
+            @else
+              <h2 class="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.1] tracking-tight">
+                {{ $s['title'] }}
+                <span class="block text-[rgba(219,165,84,1)]">{{ $s['subtitle'] }}</span>
+              </h2>
+            @endif
 
             <p class="mt-5 text-base sm:text-lg leading-relaxed text-slate-200">
               {{ $s['desc'] }}
@@ -160,7 +171,7 @@
     'Mengutamakan ketepatan waktu dengan perencanaan terukur.',
     'Membangun komunikasi terbuka dengan klien dan stakeholder.',
   ]);
-  $cardImage = data_get($homeData, 'card_image', asset('image/hero1.png'));
+  $cardImage = data_get($homeData, 'card_image', asset('image/logo-mjb.png'));
   $resolveImage = function ($path) {
       if (! $path) {
           return '';
@@ -187,7 +198,7 @@
       <div class="space-y-3">
         <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Tentang Kami</p>
         <h2 class="text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-          Visi & <span class="text-sky-700">Misi</span>
+          Visi & <span class="text-[rgba(219,165,84,1)]">Misi</span>
         </h2>
         <p class="text-lg text-slate-500 leading-relaxed">
           {{ $aboutExcerpt }}
@@ -402,4 +413,3 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
 })();
 </script>
 @endpush
-

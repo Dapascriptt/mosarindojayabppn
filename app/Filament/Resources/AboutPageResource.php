@@ -42,6 +42,16 @@ class AboutPageResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
+                Forms\Components\Section::make('Foto Lokasi')
+                    ->schema([
+                        Forms\Components\FileUpload::make('location_photos')
+                            ->label('Foto Lokasi')
+                            ->image()
+                            ->multiple()
+                            ->disk('public')
+                            ->directory('about/locations')
+                            ->columnSpanFull(),
+                    ]),
                 Forms\Components\Section::make('Highlight')
                     ->schema([
                         Forms\Components\Repeater::make('highlights')

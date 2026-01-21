@@ -10,6 +10,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'slug',
+        'type',
         'category',
         'excerpt',
         'description',
