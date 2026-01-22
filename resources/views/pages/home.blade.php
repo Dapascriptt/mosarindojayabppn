@@ -244,6 +244,7 @@
   <div class="absolute inset-0 bg-slate-900/55"></div>
   <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
     <div class="relative grid gap-6 md:grid-cols-2 items-center min-h-[320px] sm:min-h-[380px]">
+      <div class="absolute left-6 right-6 top-1/2 h-px -translate-y-1/2 bg-white/50 md:hidden"></div>
       <div class="hidden md:block absolute inset-y-6 left-1/2 w-px -translate-x-1/2 bg-white/50"></div>
 
       <a href="{{ route('products.index') }}"
