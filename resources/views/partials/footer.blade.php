@@ -3,7 +3,7 @@
     <div class="grid gap-8 md:grid-cols-[1.2fr_0.8fr]">
       <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="h-14 w-14 overflow-hidden rounded-2xl bg-black/90 p-2 shadow-sm ring-1 ring-white/10">
+          <div class="h-14 w-14 overflow-hidden rounded-2xl p-2 shadow-sm ring-1 ring-white/10" style="background-color:#0b0b0b;">
             <img src="/image/logo-mjb2.png" alt="Masarindo Jaya Balikpapan" class="h-full w-full object-contain">
           </div>
           <div>
