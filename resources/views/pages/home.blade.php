@@ -216,8 +216,8 @@
           <h3 class="text-lg font-extrabold text-slate-900">Misi</h3>
           <ul class="mt-3 space-y-2 text-sm text-slate-600 leading-relaxed">
             @foreach ($missionPoints as $point)
-              <li class="flex items-start gap-2">
-                <span class="mt-1 h-2 w-2 rounded-full bg-[rgba(219,165,84,1)]"></span>
+              <li class="flex items-start gap-3">
+                <span class="mt-1.5 h-2.5 w-2.5 rounded-full bg-[rgba(219,165,84,1)] ring-2 ring-[rgba(219,165,84,0.25)] shadow-sm shadow-[rgba(219,165,84,0.25)]"></span>
                 <span>{{ data_get($point, 'text', $point) }}</span>
               </li>
             @endforeach
