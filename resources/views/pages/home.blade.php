@@ -122,7 +122,7 @@
     @endforeach
 
     {{-- Controls --}}
-    <div class="pointer-events-none absolute inset-x-0 bottom-8">
+    <div class="pointer-events-none absolute inset-x-0 bottom-4">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
         <div class="pointer-events-auto flex items-center gap-2">
           <button type="button" data-hero-prev
