@@ -40,7 +40,7 @@
       'desc' => 'Jasa konstruksi Balikpapan dengan alur kerja terukur: survey, RAB, eksekusi, QC hingga serah terima.',
     ],
     [
-      'media' => asset('image/hero1.png'),
+      'media' => asset('image/hero3.png'),
       'title' => 'Supply Material Terencana',
       'subtitle' => 'Rantai pasok kuat untuk kebutuhan proyek.',
       'desc' => 'Supplier material alam Balikpapan termasuk pasir dan batu split Palu dengan spesifikasi tepat dan pengiriman on-time.',
