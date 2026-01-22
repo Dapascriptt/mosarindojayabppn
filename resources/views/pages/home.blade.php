@@ -288,7 +288,7 @@
         <div class="group flex items-center justify-center p-4">
           <img src="{{ $resolveImage(data_get($logo, 'src', $logo)) }}"
                alt="{{ data_get($logo, 'name', 'Logo') }}"
-               class="h-12 w-auto object-contain opacity-40 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-110">
+               class="h-16 w-auto object-contain transition-all duration-500 group-hover:scale-110">
         </div>
       @endforeach
     </div>
