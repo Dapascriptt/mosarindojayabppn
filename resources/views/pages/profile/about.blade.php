@@ -92,7 +92,7 @@
 
     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Tentang Kami</h2>
     <p class="text-sm sm:text-base text-slate-600">
-      Ringkasan profil perusahaan, fokus layanan, dan komitmen mutu untuk klien.
+      profil perusahaan, fokus layanan, dan komitmen mutu untuk klien.
     </p>
   </div>
 
@@ -103,7 +103,7 @@
     </div>
     <div class="reveal rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
       <h2 class="text-lg font-extrabold text-slate-900">Spesialisasi</h2>
-      <p class="mt-2 text-sm text-slate-700">Showroom otomotif, interior komersial, electrical panel & wiring, supply material termasuk batu split Palu, serta land clearing.</p>
+      <p class="mt-2 text-sm text-slate-700">Interior komersial, electrical panel & wiring, supply material termasuk batu split Palu, serta land clearing.</p>
     </div>
     <div class="reveal rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
       <h2 class="text-lg font-extrabold text-slate-900">Komitmen</h2>
