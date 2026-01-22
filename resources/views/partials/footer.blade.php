@@ -3,7 +3,9 @@
     <div class="grid gap-8 md:grid-cols-[1.2fr_0.8fr]">
       <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <img src="/image/logo-mjb2.png" alt="Masarindo Jaya Balikpapan" class="h-11 w-11 object-contain">
+          <div class="h-14 w-14 overflow-hidden rounded-2xl bg-black/90 p-2 shadow-sm ring-1 ring-white/10">
+            <img src="/image/logo-mjb2.png" alt="Masarindo Jaya Balikpapan" class="h-full w-full object-contain">
+          </div>
           <div>
             <div class="text-base font-extrabold text-white">{{ config('app.name') }}</div>
             <div class="text-xs font-semibold text-white/80">Kontraktor & Supply</div>
