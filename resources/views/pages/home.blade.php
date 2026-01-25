@@ -310,15 +310,15 @@
         </a>
       </div>
 
-      <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ($galleryPreview as $item)
           <button type="button"
-            class="gallery-card w-full max-w-[240px] overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl"
+            class="gallery-card overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl"
             data-gallery-images='@json(data_get($item, "images", []))'
             data-gallery-title="{{ e(data_get($item, 'title')) }}"
             data-gallery-tag="{{ e(data_get($item, 'tag')) }}"
             data-gallery-desc="{{ e(data_get($item, 'desc')) }}">
-            <div class="relative h-24 overflow-hidden">
+            <div class="relative h-28 overflow-hidden">
               <img src="{{ data_get($item, 'cover') }}"
                    alt="{{ data_get($item, 'title', 'Galeri') }}"
                    class="h-full w-full object-cover transition duration-700 hover:scale-[1.03]">
