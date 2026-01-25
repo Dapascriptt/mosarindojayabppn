@@ -40,7 +40,7 @@
         {{ data_get($contactData, 'hero_title', 'Kami siap membantu proyek Anda') }}
       </h1>
       <p class="text-base sm:text-lg text-slate-100/90 max-w-3xl">
-        {{ data_get($contactData, 'hero_desc', 'Sampaikan kebutuhan showroom, konstruksi, interior, electrical, supply material, atau land clearing. Tim kami akan merespons secepatnya.') }}
+        {{ data_get($contactData, 'hero_desc', 'Sampaikan kebutuhan konstruksi, interior, electrical, supply material, atau land clearing. Tim kami akan merespons secepatnya.') }}
       </p>
     </div>
   </section>

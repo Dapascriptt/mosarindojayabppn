@@ -11,7 +11,7 @@
   <div class="absolute inset-0 bg-slate-950/60"></div>
   <div class="relative mx-auto max-w-5xl px-6 py-14 space-y-3">
     <p class="text-sm font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]">Galeri Proyek</p>
-    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">Showroom, interior, electrical, supply, land clearing</h1>
+    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">Interior, electrical, supply, land clearing</h1>
     <p class="text-base sm:text-lg text-slate-100">Klik kartu untuk melihat lebih banyak foto dan detail singkat.</p>
   </div>
 </section>
