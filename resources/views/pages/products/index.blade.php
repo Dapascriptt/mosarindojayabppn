@@ -42,7 +42,7 @@
         <button type="button"
           class="product-acc-toggle flex w-full items-center justify-between gap-3 px-6 py-5 text-left">
           <div>
-            <p class="text-xs font-extrabold uppercase tracking-[0.2em] text-slate-400">Tipe</p>
+
             <h2 class="text-xl font-extrabold text-slate-900">{{ $label }}</h2>
           </div>
           <span class="product-acc-icon grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition">
@@ -52,7 +52,7 @@
           </span>
         </button>
 
-        <div class="product-acc-panel hidden border-t border-slate-200">
+        <div class="product-acc-panel border-t border-slate-200">
           <div class="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($list as $product)
               <a href="{{ route('products.show', data_get($product, 'slug')) }}"
@@ -85,25 +85,3 @@
   </div>
 </section>
 @endsection
-
-@push('scripts')
-<script>
-(() => {
-  document.querySelectorAll('.product-acc-toggle').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const card = btn.closest('.rounded-3xl');
-      if (!card) return;
-      const panel = card.querySelector('.product-acc-panel');
-      const icon = card.querySelector('.product-acc-icon svg');
-      if (!panel) return;
-      const open = !panel.classList.contains('hidden');
-      panel.classList.toggle('hidden');
-      if (icon) {
-        icon.style.transform = open ? '' : 'rotate(180deg)';
-      }
-    });
-  });
-})();
-</script>
-@endpush
-

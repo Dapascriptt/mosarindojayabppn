@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AboutPage;
 use App\Models\HomePage;
+use App\Models\GalleryItem;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -14,6 +17,28 @@ class HomeController extends Controller
     {
         $about = AboutPage::first();
         $home = HomePage::first();
+        $galleryItems = GalleryItem::orderBy('created_at', 'desc')->take(4)->get()->map(function (GalleryItem $item) {
+            $images = collect($item->images ?? [])
+                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                ->filter()
+                ->map(function ($path) {
+                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                        return $path;
+                    }
+
+                    return Storage::url($path);
+                })
+                ->values()
+                ->all();
+
+            return [
+                'title' => $item->title,
+                'tag' => $item->tag,
+                'desc' => $item->desc,
+                'cover' => $images[0] ?? null,
+                'images' => $images,
+            ];
+        });
 
         if (! $about) {
             $about = [
@@ -30,6 +55,7 @@ class HomeController extends Controller
         return view('pages.home', [
             'about' => $about,
             'home' => $home,
+            'galleryPreview' => $galleryItems,
         ]);
     }
 }

@@ -295,6 +295,74 @@
   </div>
 </section>
 
+@if (!empty($galleryPreview))
+  <section class="bg-slate-50 py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h2 class="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">Galeri</h2>
+          <p class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">Dokumentasi Proyek Terbaru</p>
+          <p class="mt-2 text-sm text-slate-600">Cuplikan foto dari beberapa proyek dan layanan kami.</p>
+        </div>
+        <a href="{{ route('gallery') }}"
+           class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600 hover:text-slate-900 transition">
+          Lihat galeri <span aria-hidden="true">></span>
+        </a>
+      </div>
+
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        @foreach ($galleryPreview as $item)
+          <button type="button"
+            class="gallery-card overflow-hidden rounded-2xl bg-white text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl"
+            data-gallery-images='@json(data_get($item, "images", []))'
+            data-gallery-title="{{ e(data_get($item, 'title')) }}"
+            data-gallery-tag="{{ e(data_get($item, 'tag')) }}"
+            data-gallery-desc="{{ e(data_get($item, 'desc')) }}">
+            <div class="relative h-40 overflow-hidden">
+              <img src="{{ data_get($item, 'cover') }}"
+                   alt="{{ data_get($item, 'title', 'Galeri') }}"
+                   class="h-full w-full object-cover transition duration-700 hover:scale-[1.03]">
+            </div>
+            <div class="p-4 space-y-2">
+              <div class="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]">
+                {{ data_get($item, 'tag', 'Galeri') }}
+              </div>
+              <h3 class="text-sm font-extrabold text-slate-900">{{ data_get($item, 'title') }}</h3>
+              <p class="text-xs text-slate-600 line-clamp-2">{{ data_get($item, 'desc') }}</p>
+            </div>
+          </button>
+        @endforeach
+      </div>
+    </div>
+  </section>
+@endif
+
+{{-- Modal Galeri (reuse) --}}
+<div id="homeGalleryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/75 px-4">
+  <div class="relative w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+    <button type="button" class="absolute right-4 top-4 rounded-full bg-slate-900 text-white p-2" data-home-gallery-close>
+      <span class="sr-only">Tutup</span>
+      X
+    </button>
+    <div class="grid gap-4 p-5 lg:grid-cols-2">
+      <div class="relative">
+        <img id="homeGalleryModalImage" src="" alt="" class="h-full w-full rounded-2xl object-cover min-h-[300px]">
+        <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-prev><</button>
+        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-next>></button>
+      </div>
+      <div class="space-y-3">
+        <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]" id="homeGalleryModalTag"></p>
+        <h3 class="text-2xl font-extrabold text-slate-900" id="homeGalleryModalTitle"></h3>
+        <p class="text-sm text-slate-700" id="homeGalleryModalDesc"></p>
+        <div class="pt-2">
+          <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Foto lainnya</p>
+          <div id="homeGalleryModalThumbs" class="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 @endsection
 
@@ -411,6 +479,87 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
   }, { threshold: 0.15 });
 
   all.forEach(el => io.observe(el));
+})();
+
+// Modal galeri di home
+(() => {
+  const modal = document.getElementById('homeGalleryModal');
+  if (!modal) return;
+  const imgEl = document.getElementById('homeGalleryModalImage');
+  const tagEl = document.getElementById('homeGalleryModalTag');
+  const titleEl = document.getElementById('homeGalleryModalTitle');
+  const descEl = document.getElementById('homeGalleryModalDesc');
+  const thumbsEl = document.getElementById('homeGalleryModalThumbs');
+  const prevBtn = modal.querySelector('[data-home-gallery-prev]');
+  const nextBtn = modal.querySelector('[data-home-gallery-next]');
+  const closeBtn = modal.querySelector('[data-home-gallery-close]');
+  let current = { images: [], idx: 0 };
+
+  const open = (data) => {
+    current = { images: data.images || [], idx: 0, tag: data.tag, title: data.title, desc: data.desc };
+    update();
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const close = () => {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+
+  const update = () => {
+    if (!current.images.length) return;
+    imgEl.src = current.images[current.idx];
+    imgEl.alt = current.title || '';
+    tagEl.textContent = current.tag || '';
+    titleEl.textContent = current.title || '';
+    descEl.textContent = current.desc || '';
+    if (thumbsEl) {
+      thumbsEl.innerHTML = '';
+      current.images.forEach((src, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `group relative overflow-hidden rounded-xl ring-2 ${i === current.idx ? 'ring-[rgba(219,165,84,1)]' : 'ring-transparent'} transition`;
+        btn.innerHTML = `<img src="${src}" alt="" class="h-16 w-full object-cover transition duration-300 group-hover:scale-[1.03]">`;
+        btn.addEventListener('click', () => {
+          current.idx = i;
+          update();
+        });
+        thumbsEl.appendChild(btn);
+      });
+    }
+  };
+
+  const next = () => {
+    if (!current.images.length) return;
+    current.idx = (current.idx + 1) % current.images.length;
+    update();
+  };
+  const prev = () => {
+    if (!current.images.length) return;
+    current.idx = (current.idx - 1 + current.images.length) % current.images.length;
+    update();
+  };
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-gallery-images]');
+    if (!card || !card.classList.contains('gallery-card')) return;
+    e.preventDefault();
+    const images = JSON.parse(card.getAttribute('data-gallery-images') || '[]');
+    open({
+      images,
+      title: card.getAttribute('data-gallery-title') || '',
+      tag: card.getAttribute('data-gallery-tag') || '',
+      desc: card.getAttribute('data-gallery-desc') || '',
+    });
+  });
+
+  closeBtn?.addEventListener('click', close);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) close();
+  });
+  nextBtn?.addEventListener('click', next);
+  prevBtn?.addEventListener('click', prev);
 })();
 </script>
 @endpush
