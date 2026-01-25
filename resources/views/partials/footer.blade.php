@@ -12,7 +12,7 @@
           </div>
         </div>
         <p class="max-w-md text-sm text-white/90">
-          Mitra konstruksi & supply untuk proyek Interior, electrical, dan land clearing
+          Mitra konstruksi & supply untuk proyek Interior dan electrical
           dengan standar mutu dan ketepatan waktu.
         </p>
       </div>

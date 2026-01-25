@@ -8,7 +8,7 @@
           <img src="/image/logo-mjb.png" alt="Masarindo Jaya Balikpapan" class="h-10 w-10 object-contain">
         </span>
         <div class="leading-tight">
-          <div class="text-sm font-extrabold tracking-tight text-slate-900 group-hover:text-slate-950">
+          <div class="text-sm font-extrabold tracking-tight text-slate-900 group-hover:text-slate-900">
             {{ config('app.name') }}
           </div>
           <div class="text-[11px] font-semibold tracking-wide text-slate-500">
@@ -20,20 +20,20 @@
       {{-- Desktop Menu --}}
       <div class="hidden lg:flex items-center gap-1 text-sm font-semibold text-slate-800">
         <a href="{{ route('home') }}"
-           class="px-3 py-2 rounded-xl hover:bg-slate-900/5 hover:text-slate-950 transition">
+           class="px-3 py-2 rounded-xl hover:bg-[rgba(219,165,84,0.35)] hover:text-slate-900 transition">
           Beranda
         </a>
          <a href="{{ route('products.index') }}"
-           class="px-3 py-2 rounded-xl hover:bg-slate-900/5 hover:text-slate-950 transition">
+           class="px-3 py-2 rounded-xl hover:bg-[rgba(219,165,84,0.35)] hover:text-slate-900 transition">
           Produk
         </a>
 
         <a href="{{ route('services.index') }}"
-           class="px-3 py-2 rounded-xl hover:bg-slate-900/5 hover:text-slate-950 transition">
+           class="px-3 py-2 rounded-xl hover:bg-[rgba(219,165,84,0.35)] hover:text-slate-900 transition">
           Layanan
         </a>
         <a href="{{ route('profile.about') }}"
-           class="px-3 py-2 rounded-xl hover:bg-slate-900/5 hover:text-slate-950 transition">
+           class="px-3 py-2 rounded-xl hover:bg-[rgba(219,165,84,0.35)] hover:text-slate-900 transition">
           Tentang Kami
         </a>
 
@@ -42,7 +42,7 @@
 
 
         <a href="{{ route('gallery') }}"
-           class="px-3 py-2 rounded-xl hover:bg-slate-900/5 hover:text-slate-950 transition">
+           class="px-3 py-2 rounded-xl hover:bg-[rgba(219,165,84,0.35)] hover:text-slate-900 transition">
           Galeri
         </a>
 
@@ -67,12 +67,12 @@
     <div class="lg:hidden hidden" data-mobile-panel>
       <div class="pb-4 pt-2">
         <div class="grid gap-1 rounded-2xl bg-white p-2 ring-1 ring-slate-200 shadow-sm">
-          <a href="{{ route('home') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-slate-900/5 transition">Beranda</a>
-          <a href="{{ route('products.index') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-slate-900/5 transition">Produk</a>
-          <a href="{{ route('services.index') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-slate-900/5 transition">Layanan</a>
+          <a href="{{ route('home') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-[rgba(219,165,84,0.35)] transition">Beranda</a>
+          <a href="{{ route('products.index') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-[rgba(219,165,84,0.35)] transition">Produk</a>
+          <a href="{{ route('services.index') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-[rgba(219,165,84,0.35)] transition">Layanan</a>
 
-          <a href="{{ route('profile.about') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-slate-900/5 transition">Tentang Kami</a>
-          <a href="{{ route('gallery') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-slate-900/5 transition">Galeri</a>
+          <a href="{{ route('profile.about') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-[rgba(219,165,84,0.35)] transition">Tentang Kami</a>
+          <a href="{{ route('gallery') }}" class="rounded-xl px-3 py-3 font-semibold text-slate-900 hover:bg-[rgba(219,165,84,0.35)] transition">Galeri</a>
         <a href="{{ route('contact') }}" class="rounded-xl bg-[rgba(219,165,84,1)] px-3 py-3 font-extrabold text-white transition hover:brightness-95">Kontak</a>
         </div>
       </div>
@@ -192,3 +192,6 @@
 })();
 </script>
 @endpush
+
+
+

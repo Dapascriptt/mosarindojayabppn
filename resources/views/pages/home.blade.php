@@ -280,7 +280,10 @@
 <section class="bg-white py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-      <h2 class="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">Mitra Kerja Terpercaya</h2>
+     <h2 class="text-sm font-bold uppercase tracking-[0.2em] text-black">
+  Mitra Kerja Terpercaya
+</h2>
+
     </div>
 
     <div class="grid grid-cols-2 items-center gap-8 md:grid-cols-3 lg:grid-cols-6">
@@ -298,42 +301,54 @@
 @if (!empty($galleryPreview))
   <section class="bg-slate-50 py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h2 class="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">Galeri</h2>
-          <p class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">Dokumentasi Proyek Terbaru</p>
-          <p class="mt-2 text-sm text-slate-600">Cuplikan foto dari beberapa proyek dan layanan kami.</p>
-        </div>
-        <a href="{{ route('gallery') }}"
-           class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600 hover:text-slate-900 transition">
-          Lihat galeri <span aria-hidden="true">></span>
-        </a>
-      </div>
 
-      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        @foreach ($galleryPreview as $item)
-          <button type="button"
-            class="gallery-card overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl"
-            data-gallery-images='@json(data_get($item, "images", []))'
-            data-gallery-title="{{ e(data_get($item, 'title')) }}"
-            data-gallery-tag="{{ e(data_get($item, 'tag')) }}"
-            data-gallery-desc="{{ e(data_get($item, 'desc')) }}">
-            <div class="relative h-28 overflow-hidden">
-              <img src="{{ data_get($item, 'cover') }}"
-                   alt="{{ data_get($item, 'title', 'Galeri') }}"
-                   class="h-full w-full object-cover transition duration-700 hover:scale-[1.03]">
-            </div>
-            <div class="p-3 space-y-1.5">
-              <div class="inline-flex items-center gap-2 text-[9px] font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]">
-                {{ data_get($item, 'tag', 'Galeri') }}
-              </div>
-              <h3 class="text-[13px] font-extrabold text-slate-900">{{ data_get($item, 'title') }}</h3>
-              <p class="text-[11px] text-slate-600 line-clamp-2">{{ data_get($item, 'desc') }}</p>
-            </div>
-          </button>
-        @endforeach
-      </div>
-    </div>
+  <!-- Header Galeri (TENGAH) -->
+  <div class="text-center mb-10">
+    <h2 class="text-sm font-bold uppercase tracking-[0.2em] text-black">
+      Galeri
+    </h2>
+
+
+
+    <a href="{{ route('gallery') }}"
+       class="mt-4 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-slate-600 hover:text-slate-900 transition">
+      Lihat galeri <span aria-hidden="true">></span>
+    </a>
+  </div>
+
+  <!-- Grid Galeri -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    @foreach ($galleryPreview as $item)
+      <button type="button"
+        class="gallery-card overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl"
+        data-gallery-images='@json(data_get($item, "images", []))'
+        data-gallery-title="{{ e(data_get($item, 'title')) }}"
+        data-gallery-tag="{{ e(data_get($item, 'tag')) }}"
+        data-gallery-desc="{{ e(data_get($item, 'desc')) }}">
+
+        <div class="relative h-28 overflow-hidden">
+          <img src="{{ data_get($item, 'cover') }}"
+               alt="{{ data_get($item, 'title', 'Galeri') }}"
+               class="h-full w-full object-cover transition duration-700 hover:scale-[1.03]">
+        </div>
+
+        <div class="p-3 space-y-1.5">
+          <div class="inline-flex items-center gap-2 text-[9px] font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]">
+            {{ data_get($item, 'tag', 'Galeri') }}
+          </div>
+          <h3 class="text-[13px] font-extrabold text-slate-900">
+            {{ data_get($item, 'title') }}
+          </h3>
+          <p class="text-[11px] text-slate-600 line-clamp-2">
+            {{ data_get($item, 'desc') }}
+          </p>
+        </div>
+      </button>
+    @endforeach
+  </div>
+
+</div>
+
   </section>
 @endif
 
