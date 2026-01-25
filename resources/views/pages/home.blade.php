@@ -318,10 +318,10 @@
             data-gallery-title="{{ e(data_get($item, 'title')) }}"
             data-gallery-tag="{{ e(data_get($item, 'tag')) }}"
             data-gallery-desc="{{ e(data_get($item, 'desc')) }}">
-            <div class="relative h-28 overflow-hidden">
+            <div class="relative h-28 overflow-hidden bg-white">
               <img src="{{ data_get($item, 'cover') }}"
                    alt="{{ data_get($item, 'title', 'Galeri') }}"
-                   class="h-full w-full object-cover transition duration-700 hover:scale-[1.03]">
+                   class="h-full w-full object-contain transition duration-700 hover:scale-[1.03]">
             </div>
             <div class="p-3 space-y-1.5">
               <div class="inline-flex items-center gap-2 text-[9px] font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]">
