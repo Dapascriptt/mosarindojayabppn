@@ -5,7 +5,7 @@
   $serviceMeta = \Illuminate\Support\Str::limit(trim(strip_tags($serviceDesc)), 155, '');
 @endphp
 @section('title', $serviceTitle . ' | Mosarindo Balikpapan')
-@section('meta_description', $serviceMeta ?: 'Layanan konstruksi dan supply Balikpapan untuk proyek B2B dan instansi. Konsultasi dan perencanaan profesional.')
+@section('meta_description', $serviceMeta ?: 'Layanan konstruksi dan supply Balikpapan untuk proyek  instansi. Konsultasi dan perencanaan profesional.')
 @section('canonical', url()->current())
 @section('meta_image', asset('image/hero1.png'))
 @section('meta_robots', 'index, follow')

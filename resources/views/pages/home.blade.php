@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Kontraktor & Supplier Balikpapan | Mosarindo')
-@section('meta_description', 'Mosarindo Jaya Balikpapan menyediakan jasa konstruksi, MEP, interior, renovasi, serta supply material alam dan daging ayam untuk proyek dan instansi.')
+@section('meta_description', 'Mosarindo Jaya Balikpapan menyediakan jasa konstruksi, interior, renovasi, serta supply material alam dan daging ayam untuk proyek dan instansi.')
 @section('canonical', url()->current())
 @section('meta_image', asset('image/hero1.png'))
 @section('meta_robots', 'index, follow')
@@ -31,7 +31,7 @@
       'media' => asset('image/hero1.png'),
       'title' => 'Kontraktor & Supply Konstruksi',
       'subtitle' => 'Tepat Waktu. Terukur. Profesional.',
-      'desc' => 'Kontraktor Balikpapan untuk konstruksi bangunan, MEP, interior, dan supply material alam. Siap mendukung tender proyek dan instansi.',
+      'desc' => 'Kontraktor Balikpapan untuk konstruksi bangunan, interior, dan supply material alam. Siap mendukung tender proyek dan instansi.',
     ],
     [
       'media' => asset('image/hero2.png'),

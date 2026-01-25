@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Katalog Produk Balikpapan | Mosarindo')
-@section('meta_description', 'Katalog produk supply material, kebutuhan proyek, dan pengadaan B2B di Balikpapan. Spesifikasi jelas dan dukungan pengiriman.')
+@section('meta_description', 'Katalog produk supply material, kebutuhan proyek, Spesifikasi jelas dan dukungan pengiriman.')
 @section('canonical', url()->current())
 @section('meta_image', asset('image/hero1.png'))
 @section('meta_robots', 'index, follow')

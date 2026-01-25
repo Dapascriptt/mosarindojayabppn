@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Tentang Kami | Mosarindo Balikpapan')
-@section('meta_description', 'Profil Mosarindo Jaya Balikpapan: legalitas, tenaga ahli, dan standar kerja profesional untuk proyek konstruksi, MEP, interior, dan supply.')
+@section('meta_description', 'Profil Mosarindo Jaya Balikpapan: legalitas, tenaga ahli, dan standar kerja profesional untuk proyek konstruksi, interior, dan supply.')
 @section('canonical', url()->current())
 @section('meta_image', asset('image/logo-mjb.png'))
 @section('meta_robots', 'index, follow')
@@ -38,7 +38,7 @@
       <p class="text-base sm:text-lg text-[rgba(219,165,84,1)] font-semibold">{{ data_get($about, 'hero_subtitle') }}</p>
     @endif
     <p class="text-base sm:text-lg text-slate-100">
-      {{ data_get($about, 'hero_desc') }}
+      {{ str_replace('showroom, ', '', data_get($about, 'hero_desc')) }}
     </p>
     @if (!empty($highlights))
       <div class="flex flex-wrap gap-4 text-sm text-slate-100">
@@ -103,7 +103,7 @@
     </div>
     <div class="reveal rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
       <h2 class="text-lg font-extrabold text-slate-900">Spesialisasi</h2>
-      <p class="mt-2 text-sm text-slate-700">Interior komersial, electrical panel & wiring, supply material termasuk batu split Palu, serta land clearing.</p>
+      <p class="mt-2 text-sm text-slate-700">Interior komersial, electrical panel & wiring, supply material termasuk batu split Palu.</p>
     </div>
     <div class="reveal rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
       <h2 class="text-lg font-extrabold text-slate-900">Komitmen</h2>

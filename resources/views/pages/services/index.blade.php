@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Layanan Konstruksi Balikpapan | Mosarindo')
-@section('meta_description', 'Layanan konstruksi, MEP, interior, land clearing, dan supply material Balikpapan. Solusi lengkap untuk proyek B2B dan instansi.')
+@section('meta_description', 'Layanan konstruksi, interior dan supply material Balikpapan. Solusi lengkap untuk proyek B2B dan instansi.')
 @section('canonical', url()->current())
 @section('meta_image', asset('image/hero1.png'))
 @section('meta_robots', 'index, follow')

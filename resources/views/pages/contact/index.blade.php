@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Kontak | Mosarindo Balikpapan')
-@section('meta_description', 'Hubungi Mosarindo Jaya Balikpapan untuk kebutuhan konstruksi, MEP, interior, supply material, dan pengadaan proyek B2B.')
+@section('meta_description', 'Hubungi Mosarindo Jaya Balikpapan untuk kebutuhan konstruksi, interior, supply material, dan pengadaan proyek B2B.')
 @section('canonical', url()->current())
 @section('meta_image', asset('image/hero1.png'))
 @section('meta_robots', 'index, follow')
