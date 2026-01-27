@@ -355,14 +355,14 @@
 @endif
 
 {{-- Modal Galeri (reuse) --}}
-<div id="homeGalleryModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/75 px-4" style="display: none;">
-  <div class="relative w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+<div id="homeGalleryModal" class="fixed inset-0 z-50 hidden flex items-start justify-center bg-slate-900/75 px-4 py-6" style="display: none;">
+  <div class="relative w-full max-w-6xl overflow-y-auto rounded-3xl bg-white shadow-2xl" style="max-height: 90vh;">
     <button type="button" class="absolute right-4 top-4 rounded-full bg-slate-900 text-white p-2" data-home-gallery-close>
       <span class="sr-only">Tutup</span>
       X
     </button>
     <div class="grid gap-4 p-5">
-      <div class="grid gap-4 lg:grid-cols-2">
+      <div class="grid gap-4 md:grid-cols-2">
         <div class="rounded-2xl border border-slate-200 p-3">
           <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Sebelum</p>
           <div class="relative mt-2">
