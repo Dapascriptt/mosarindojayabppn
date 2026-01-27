@@ -37,6 +37,30 @@ class HomeController extends Controller
                 'desc' => $item->desc,
                 'cover' => $images[0] ?? null,
                 'images' => $images,
+                'before_images' => collect($item->before_images ?? [])
+                    ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                    ->filter()
+                    ->map(function ($path) {
+                        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                            return $path;
+                        }
+
+                        return Storage::url($path);
+                    })
+                    ->values()
+                    ->all(),
+                'after_images' => collect($item->after_images ?? [])
+                    ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                    ->filter()
+                    ->map(function ($path) {
+                        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                            return $path;
+                        }
+
+                        return Storage::url($path);
+                    })
+                    ->values()
+                    ->all(),
             ];
         });
 

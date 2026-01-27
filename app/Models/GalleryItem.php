@@ -11,9 +11,13 @@ class GalleryItem extends Model
         'tag',
         'desc',
         'images',
+        'before_images',
+        'after_images',
     ];
 
     protected $casts = [
         'images' => 'array',
+        'before_images' => 'array',
+        'after_images' => 'array',
     ];
 }

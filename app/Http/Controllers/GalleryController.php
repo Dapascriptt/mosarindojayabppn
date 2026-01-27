@@ -24,11 +24,39 @@ class GalleryController extends Controller
                 ->values()
                 ->all();
 
+            $beforeImages = collect($item->before_images ?? [])
+                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                ->filter()
+                ->map(function ($path) {
+                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                        return $path;
+                    }
+
+                    return Storage::url($path);
+                })
+                ->values()
+                ->all();
+
+            $afterImages = collect($item->after_images ?? [])
+                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                ->filter()
+                ->map(function ($path) {
+                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                        return $path;
+                    }
+
+                    return Storage::url($path);
+                })
+                ->values()
+                ->all();
+
             return [
                 'title' => $item->title,
                 'tag' => $item->tag,
                 'desc' => $item->desc,
                 'images' => $images,
+                'before_images' => $beforeImages,
+                'after_images' => $afterImages,
             ];
         });
 

@@ -321,6 +321,8 @@
     @foreach ($galleryPreview as $item)
       <button type="button"
         class="gallery-card overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-xl"
+        data-gallery-before='@json(data_get($item, "before_images", []))'
+        data-gallery-after='@json(data_get($item, "after_images", []))'
         data-gallery-images='@json(data_get($item, "images", []))'
         data-gallery-title="{{ e(data_get($item, 'title')) }}"
         data-gallery-tag="{{ e(data_get($item, 'tag')) }}"
@@ -353,26 +355,37 @@
 @endif
 
 {{-- Modal Galeri (reuse) --}}
-<div id="homeGalleryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/75 px-4">
+<div id="homeGalleryModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/75 px-4" style="display: none;">
   <div class="relative w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl">
     <button type="button" class="absolute right-4 top-4 rounded-full bg-slate-900 text-white p-2" data-home-gallery-close>
       <span class="sr-only">Tutup</span>
       X
     </button>
-    <div class="grid gap-4 p-5 lg:grid-cols-2">
-      <div class="relative">
-        <img id="homeGalleryModalImage" src="" alt="" class="h-full w-full rounded-2xl object-cover min-h-[300px]">
-        <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-prev><</button>
-        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-next>></button>
+    <div class="grid gap-4 p-5">
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="rounded-2xl border border-slate-200 p-3">
+          <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Sebelum</p>
+          <div class="relative mt-2">
+            <img id="homeGalleryModalBeforeImage" src="" alt="" class="h-60 w-full rounded-xl object-cover">
+            <button type="button" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-prev-before>&#8249;</button>
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-next-before>&#8250;</button>
+          </div>
+          <div id="homeGalleryModalBeforeThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
+        </div>
+        <div class="rounded-2xl border border-slate-200 p-3">
+          <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Sesudah</p>
+          <div class="relative mt-2">
+            <img id="homeGalleryModalAfterImage" src="" alt="" class="h-60 w-full rounded-xl object-cover">
+            <button type="button" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-prev-after>&#8249;</button>
+            <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-next-after>&#8250;</button>
+          </div>
+          <div id="homeGalleryModalAfterThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
+        </div>
       </div>
       <div class="space-y-3">
         <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]" id="homeGalleryModalTag"></p>
         <h3 class="text-2xl font-extrabold text-slate-900" id="homeGalleryModalTitle"></h3>
         <p class="text-sm text-slate-700" id="homeGalleryModalDesc"></p>
-        <div class="pt-2">
-          <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Foto lainnya</p>
-          <div id="homeGalleryModalThumbs" class="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4"></div>
-        </div>
       </div>
     </div>
   </div>
@@ -500,69 +513,122 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
 (() => {
   const modal = document.getElementById('homeGalleryModal');
   if (!modal) return;
-  const imgEl = document.getElementById('homeGalleryModalImage');
+  const beforeImg = document.getElementById('homeGalleryModalBeforeImage');
+  const afterImg = document.getElementById('homeGalleryModalAfterImage');
   const tagEl = document.getElementById('homeGalleryModalTag');
   const titleEl = document.getElementById('homeGalleryModalTitle');
   const descEl = document.getElementById('homeGalleryModalDesc');
-  const thumbsEl = document.getElementById('homeGalleryModalThumbs');
-  const prevBtn = modal.querySelector('[data-home-gallery-prev]');
-  const nextBtn = modal.querySelector('[data-home-gallery-next]');
+  const beforeThumbs = document.getElementById('homeGalleryModalBeforeThumbs');
+  const afterThumbs = document.getElementById('homeGalleryModalAfterThumbs');
+  const prevBefore = modal.querySelector('[data-home-gallery-prev-before]');
+  const nextBefore = modal.querySelector('[data-home-gallery-next-before]');
+  const prevAfter = modal.querySelector('[data-home-gallery-prev-after]');
+  const nextAfter = modal.querySelector('[data-home-gallery-next-after]');
   const closeBtn = modal.querySelector('[data-home-gallery-close]');
-  let current = { images: [], idx: 0 };
+  let current = { before: [], after: [], idxBefore: 0, idxAfter: 0 };
 
   const open = (data) => {
-    current = { images: data.images || [], idx: 0, tag: data.tag, title: data.title, desc: data.desc };
+    const beforeList = data.before?.length ? data.before : [];
+    const afterList = data.after?.length ? data.after : [];
+    const fallbackList = data.fallback?.length ? data.fallback : [];
+    current = {
+      before: beforeList.length ? beforeList : fallbackList,
+      after: afterList.length ? afterList : fallbackList,
+      idxBefore: 0,
+      idxAfter: 0,
+      tag: data.tag,
+      title: data.title,
+      desc: data.desc
+    };
     update();
+    modal.style.display = 'flex';
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   };
 
   const close = () => {
+    modal.style.display = 'none';
     modal.classList.add('hidden');
     document.body.style.overflow = '';
   };
 
   const update = () => {
-    if (!current.images.length) return;
-    imgEl.src = current.images[current.idx];
-    imgEl.alt = current.title || '';
+    if (!current.before.length && !current.after.length) return;
+    if (beforeImg && current.before.length) {
+      beforeImg.src = current.before[current.idxBefore];
+      beforeImg.alt = current.title || '';
+    }
+    if (afterImg && current.after.length) {
+      afterImg.src = current.after[current.idxAfter];
+      afterImg.alt = current.title || '';
+    }
     tagEl.textContent = current.tag || '';
     titleEl.textContent = current.title || '';
     descEl.textContent = current.desc || '';
-    if (thumbsEl) {
-      thumbsEl.innerHTML = '';
-      current.images.forEach((src, i) => {
+
+    if (beforeThumbs) {
+      beforeThumbs.innerHTML = '';
+      current.before.forEach((src, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = `group relative overflow-hidden rounded-xl ring-2 ${i === current.idx ? 'ring-[rgba(219,165,84,1)]' : 'ring-transparent'} transition`;
-        btn.innerHTML = `<img src="${src}" alt="" class="h-16 w-full object-cover transition duration-300 group-hover:scale-[1.03]">`;
+        btn.className = `group relative overflow-hidden rounded-lg ring-2 ${i === current.idxBefore ? 'ring-[rgba(219,165,84,1)]' : 'ring-transparent'} transition`;
+        btn.innerHTML = `<img src="${src}" alt="" class="h-12 w-full object-cover transition duration-300 group-hover:scale-[1.03]">`;
         btn.addEventListener('click', () => {
-          current.idx = i;
+          current.idxBefore = i;
           update();
         });
-        thumbsEl.appendChild(btn);
+        beforeThumbs.appendChild(btn);
+      });
+    }
+
+    if (afterThumbs) {
+      afterThumbs.innerHTML = '';
+      current.after.forEach((src, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `group relative overflow-hidden rounded-lg ring-2 ${i === current.idxAfter ? 'ring-[rgba(219,165,84,1)]' : 'ring-transparent'} transition`;
+        btn.innerHTML = `<img src="${src}" alt="" class="h-12 w-full object-cover transition duration-300 group-hover:scale-[1.03]">`;
+        btn.addEventListener('click', () => {
+          current.idxAfter = i;
+          update();
+        });
+        afterThumbs.appendChild(btn);
       });
     }
   };
 
-  const next = () => {
-    if (!current.images.length) return;
-    current.idx = (current.idx + 1) % current.images.length;
+  const nextB = () => {
+    if (!current.before.length) return;
+    current.idxBefore = (current.idxBefore + 1) % current.before.length;
     update();
   };
-  const prev = () => {
-    if (!current.images.length) return;
-    current.idx = (current.idx - 1 + current.images.length) % current.images.length;
+  const prevB = () => {
+    if (!current.before.length) return;
+    current.idxBefore = (current.idxBefore - 1 + current.before.length) % current.before.length;
+    update();
+  };
+  const nextA = () => {
+    if (!current.after.length) return;
+    current.idxAfter = (current.idxAfter + 1) % current.after.length;
+    update();
+  };
+  const prevA = () => {
+    if (!current.after.length) return;
+    current.idxAfter = (current.idxAfter - 1 + current.after.length) % current.after.length;
     update();
   };
 
   document.addEventListener('click', (e) => {
     const card = e.target.closest('[data-gallery-images]');
-    if (!card || !card.classList.contains('gallery-card')) return;
+    if (!card) return;
     e.preventDefault();
-    const images = JSON.parse(card.getAttribute('data-gallery-images') || '[]');
+    const before = JSON.parse(card.getAttribute('data-gallery-before') || '[]');
+    const after = JSON.parse(card.getAttribute('data-gallery-after') || '[]');
+    const fallback = JSON.parse(card.getAttribute('data-gallery-images') || '[]');
     open({
-      images,
+      before,
+      after,
+      fallback,
       title: card.getAttribute('data-gallery-title') || '',
       tag: card.getAttribute('data-gallery-tag') || '',
       desc: card.getAttribute('data-gallery-desc') || '',
@@ -573,8 +639,10 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) close();
   });
-  nextBtn?.addEventListener('click', next);
-  prevBtn?.addEventListener('click', prev);
+  nextBefore?.addEventListener('click', nextB);
+  prevBefore?.addEventListener('click', prevB);
+  nextAfter?.addEventListener('click', nextA);
+  prevAfter?.addEventListener('click', prevA);
 })();
 </script>
 @endpush
