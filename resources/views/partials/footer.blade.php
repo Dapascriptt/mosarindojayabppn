@@ -19,7 +19,7 @@
 
       <div class="grid gap-3 text-sm text-white/90">
         <div class="font-extrabold uppercase tracking-[0.18em] text-white">Kontak</div>
-        <div>Instagram: <a href="https://instagram.com/mosarindojaya" class="font-semibold text-white hover:text-white/70">instagram.com/masarindojaya</a></div>
+        <div>Instagram: <a href="https://instagram.com/mosarindojaya" class="font-semibold text-white hover:text-white/70">instagram.com/mosarindojaya</a></div>
         <div>Telepon/WhatsApp: <a href="tel:+6281254899699" class="font-semibold text-white hover:text-white/70">+62 812 5489 9699</a></div>
         <div>Email: <a href="mailto:pt.mosarindojayabpp@gmail.com" class="font-semibold text-white hover:text-white/70">pt.mosarindojayabpp@gmail.com</a></div>
         <div>Jalan MT Haryono No 43, Kelurahan Damai, Bahagia,
