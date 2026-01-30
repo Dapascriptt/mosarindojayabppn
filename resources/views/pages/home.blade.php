@@ -362,7 +362,7 @@
       X
     </button>
     <div class="grid gap-4 p-5">
-      <div class="grid gap-4 md:grid-cols-2">
+      <div id="homeGalleryModalSplit" class="grid gap-4 md:grid-cols-2">
         <div class="rounded-2xl border border-slate-200 p-3">
           <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Sebelum</p>
           <div class="relative mt-2">
@@ -381,6 +381,14 @@
           </div>
           <div id="homeGalleryModalAfterThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
         </div>
+      </div>
+      <div id="homeGalleryModalSingle" class="hidden rounded-2xl border border-slate-200 p-3">
+        <div class="relative mt-2">
+          <img id="homeGalleryModalSingleImage" src="" alt="" class="h-72 w-full rounded-xl object-cover">
+          <button type="button" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-prev-single>&#8249;</button>
+          <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" data-home-gallery-next-single>&#8250;</button>
+        </div>
+        <div id="homeGalleryModalSingleThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
       </div>
       <div class="space-y-3">
         <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]" id="homeGalleryModalTag"></p>
@@ -525,17 +533,19 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
   const prevAfter = modal.querySelector('[data-home-gallery-prev-after]');
   const nextAfter = modal.querySelector('[data-home-gallery-next-after]');
   const closeBtn = modal.querySelector('[data-home-gallery-close]');
-  let current = { before: [], after: [], idxBefore: 0, idxAfter: 0 };
+  let current = { before: [], after: [], single: [], idxBefore: 0, idxAfter: 0, idxSingle: 0 };
 
   const open = (data) => {
     const beforeList = data.before?.length ? data.before : [];
     const afterList = data.after?.length ? data.after : [];
     const fallbackList = data.fallback?.length ? data.fallback : [];
     current = {
-      before: beforeList.length ? beforeList : fallbackList,
-      after: afterList.length ? afterList : fallbackList,
+      before: beforeList,
+      after: afterList,
+      single: fallbackList,
       idxBefore: 0,
       idxAfter: 0,
+      idxSingle: 0,
       tag: data.tag,
       title: data.title,
       desc: data.desc
@@ -553,7 +563,17 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
   };
 
   const update = () => {
-    if (!current.before.length && !current.after.length) return;
+    const singleWrap = document.getElementById('homeGalleryModalSingle');
+    const splitWrap = document.getElementById('homeGalleryModalSplit');
+    const useSingle = (!current.before.length && !current.after.length) && current.single.length;
+    if (useSingle) {
+      splitWrap?.classList.add('hidden');
+      singleWrap?.classList.remove('hidden');
+    } else {
+      splitWrap?.classList.remove('hidden');
+      singleWrap?.classList.add('hidden');
+    }
+    if (!current.before.length && !current.after.length && !current.single.length) return;
     if (beforeImg && current.before.length) {
       beforeImg.src = current.before[current.idxBefore];
       beforeImg.alt = current.title || '';
@@ -561,6 +581,11 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
     if (afterImg && current.after.length) {
       afterImg.src = current.after[current.idxAfter];
       afterImg.alt = current.title || '';
+    }
+    const singleImg = document.getElementById('homeGalleryModalSingleImage');
+    if (singleImg && current.single.length) {
+      singleImg.src = current.single[current.idxSingle];
+      singleImg.alt = current.title || '';
     }
     tagEl.textContent = current.tag || '';
     titleEl.textContent = current.title || '';
@@ -595,6 +620,22 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
         afterThumbs.appendChild(btn);
       });
     }
+
+    const singleThumbs = document.getElementById('homeGalleryModalSingleThumbs');
+    if (singleThumbs) {
+      singleThumbs.innerHTML = '';
+      current.single.forEach((src, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `group relative overflow-hidden rounded-lg ring-2 ${i === current.idxSingle ? 'ring-[rgba(219,165,84,1)]' : 'ring-transparent'} transition`;
+        btn.innerHTML = `<img src="${src}" alt="" class="h-12 w-full object-cover transition duration-300 group-hover:scale-[1.03]">`;
+        btn.addEventListener('click', () => {
+          current.idxSingle = i;
+          update();
+        });
+        singleThumbs.appendChild(btn);
+      });
+    }
   };
 
   const nextB = () => {
@@ -615,6 +656,17 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
   const prevA = () => {
     if (!current.after.length) return;
     current.idxAfter = (current.idxAfter - 1 + current.after.length) % current.after.length;
+    update();
+  };
+
+  const nextS = () => {
+    if (!current.single.length) return;
+    current.idxSingle = (current.idxSingle + 1) % current.single.length;
+    update();
+  };
+  const prevS = () => {
+    if (!current.single.length) return;
+    current.idxSingle = (current.idxSingle - 1 + current.single.length) % current.single.length;
     update();
   };
 
@@ -643,6 +695,8 @@ document.querySelectorAll('a.js-scroll[href^=\"#\"]').forEach(a => {
   prevBefore?.addEventListener('click', prevB);
   nextAfter?.addEventListener('click', nextA);
   prevAfter?.addEventListener('click', prevA);
+  modal?.querySelector('[data-home-gallery-next-single]')?.addEventListener('click', nextS);
+  modal?.querySelector('[data-home-gallery-prev-single]')?.addEventListener('click', prevS);
 })();
 </script>
 @endpush

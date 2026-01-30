@@ -67,7 +67,7 @@
       </svg>
     </button>
     <div class="grid gap-4 p-5">
-      <div class="grid gap-4 md:grid-cols-2">
+      <div id="galleryModalSplit" class="grid gap-4 md:grid-cols-2">
         <div class="rounded-2xl border border-slate-200 p-3">
           <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-500">Sebelum</p>
           <div class="relative mt-2">
@@ -87,6 +87,14 @@
           <div id="galleryModalAfterThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
         </div>
       </div>
+      <div id="galleryModalSingle" class="hidden rounded-2xl border border-slate-200 p-3">
+        <div class="relative mt-2">
+          <img id="galleryModalSingleImage" src="" alt="" class="h-72 w-full rounded-xl object-cover">
+          <button type="button" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" onclick="prevSingle()">&#8249;</button>
+          <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow" onclick="nextSingle()">&#8250;</button>
+        </div>
+        <div id="galleryModalSingleThumbs" class="mt-3 grid grid-cols-4 gap-2"></div>
+      </div>
       <div class="space-y-3">
         <p class="text-xs font-extrabold uppercase tracking-[0.18em] text-[rgba(219,165,84,1)]" id="galleryModalTag"></p>
         <h3 class="text-2xl font-extrabold text-slate-900" id="galleryModalTitle"></h3>
@@ -99,17 +107,19 @@
 
 @push('scripts')
 <script>
-let currentGallery = { before: [], after: [], idxBefore: 0, idxAfter: 0, tag: '', title: '', desc: '' };
+let currentGallery = { before: [], after: [], single: [], idxBefore: 0, idxAfter: 0, idxSingle: 0, tag: '', title: '', desc: '' };
 
 function openGalleryFromData({ before, after, fallback, title, tag, desc }) {
   const beforeList = before?.length ? before : [];
   const afterList = after?.length ? after : [];
   const fallbackList = fallback?.length ? fallback : [];
   currentGallery = {
-    before: beforeList.length ? beforeList : fallbackList,
-    after: afterList.length ? afterList : fallbackList,
+    before: beforeList,
+    after: afterList,
+    single: fallbackList,
     idxBefore: 0,
     idxAfter: 0,
+    idxSingle: 0,
     tag: tag || '',
     title: title || '',
     desc: desc || ''
@@ -131,13 +141,24 @@ function closeGallery() {
 function updateGalleryModal() {
   const beforeImg = document.getElementById('galleryModalBeforeImage');
   const afterImg = document.getElementById('galleryModalAfterImage');
+  const singleImg = document.getElementById('galleryModalSingleImage');
   const tagEl = document.getElementById('galleryModalTag');
   const titleEl = document.getElementById('galleryModalTitle');
   const descEl = document.getElementById('galleryModalDesc');
   const beforeThumbs = document.getElementById('galleryModalBeforeThumbs');
   const afterThumbs = document.getElementById('galleryModalAfterThumbs');
+  const singleThumbs = document.getElementById('galleryModalSingleThumbs');
+  const splitWrap = document.getElementById('galleryModalSplit');
+  const singleWrap = document.getElementById('galleryModalSingle');
 
-  if (!currentGallery.before.length && !currentGallery.after.length) return;
+  const useSingle = (!currentGallery.before.length && !currentGallery.after.length) && currentGallery.single.length;
+  if (useSingle) {
+    splitWrap?.classList.add('hidden');
+    singleWrap?.classList.remove('hidden');
+  } else {
+    splitWrap?.classList.remove('hidden');
+    singleWrap?.classList.add('hidden');
+  }
 
   if (beforeImg && currentGallery.before.length) {
     beforeImg.src = currentGallery.before[currentGallery.idxBefore];
@@ -146,6 +167,10 @@ function updateGalleryModal() {
   if (afterImg && currentGallery.after.length) {
     afterImg.src = currentGallery.after[currentGallery.idxAfter];
     afterImg.alt = currentGallery.title;
+  }
+  if (singleImg && currentGallery.single.length) {
+    singleImg.src = currentGallery.single[currentGallery.idxSingle];
+    singleImg.alt = currentGallery.title;
   }
   tagEl.textContent = currentGallery.tag;
   titleEl.textContent = currentGallery.title;
@@ -182,6 +207,22 @@ function updateGalleryModal() {
       afterThumbs.appendChild(btn);
     });
   }
+
+  if (singleThumbs) {
+    singleThumbs.innerHTML = '';
+    currentGallery.single.forEach((src, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `group relative overflow-hidden rounded-lg ring-2 ${i === currentGallery.idxSingle ? 'ring-[rgba(219,165,84,1)]' : 'ring-transparent'} transition`;
+      btn.innerHTML = `<img src="${src}" alt="" class="h-12 w-full object-cover transition duration-300 group-hover:scale-[1.03]">`;
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        currentGallery.idxSingle = i;
+        updateGalleryModal();
+      };
+      singleThumbs.appendChild(btn);
+    });
+  }
 }
 
 function nextBefore() {
@@ -205,6 +246,18 @@ function nextAfter() {
 function prevAfter() {
   if (!currentGallery.after.length) return;
   currentGallery.idxAfter = (currentGallery.idxAfter - 1 + currentGallery.after.length) % currentGallery.after.length;
+  updateGalleryModal();
+}
+
+function nextSingle() {
+  if (!currentGallery.single.length) return;
+  currentGallery.idxSingle = (currentGallery.idxSingle + 1) % currentGallery.single.length;
+  updateGalleryModal();
+}
+
+function prevSingle() {
+  if (!currentGallery.single.length) return;
+  currentGallery.idxSingle = (currentGallery.idxSingle - 1 + currentGallery.single.length) % currentGallery.single.length;
   updateGalleryModal();
 }
 
