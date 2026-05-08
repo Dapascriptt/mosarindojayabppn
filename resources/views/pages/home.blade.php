@@ -201,7 +201,7 @@
           Visi & <span class="text-[rgba(219,165,84,1)]">Misi</span>
         </h2>
         <p class="text-lg text-slate-500 leading-relaxed">
-          {{ $aboutExcerpt }}
+          {{ $i }}
         </p>
       </div>
 
