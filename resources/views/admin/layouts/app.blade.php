@@ -14,14 +14,20 @@
             width: 280px;
             background: var(--sidebar);
             color: #d1d5db;
-            transition: transform .25s ease;
+            flex: 0 0 280px;
+            transition: width .25s ease, flex-basis .25s ease, transform .25s ease;
         }
         .admin-sidebar .nav-link {
             color: #d1d5db;
             border-radius: 10px;
             padding: .75rem .9rem;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            white-space: nowrap;
         }
+        .admin-sidebar .nav-link i { width: 1.25rem; text-align: center; }
         .admin-sidebar .nav-link:hover,
         .admin-sidebar .nav-link.active {
             background: rgba(219, 165, 84, .16);
@@ -36,8 +42,36 @@
             background: var(--accent);
             color: #fff;
         }
-        .content-wrap { width: calc(100% - 280px); }
+        .brand-text, .menu-label { transition: opacity .16s ease, width .2s ease; }
+        .content-wrap {
+            width: calc(100% - 280px);
+            transition: width .25s ease;
+        }
         .topbar { backdrop-filter: blur(12px); background: rgba(255, 255, 255, .88); }
+        .sidebar-toggle {
+            width: 44px;
+            height: 44px;
+            display: inline-grid;
+            place-items: center;
+        }
+        body.sidebar-collapsed .admin-sidebar {
+            width: 88px;
+            flex-basis: 88px;
+        }
+        body.sidebar-collapsed .content-wrap { width: calc(100% - 88px); }
+        body.sidebar-collapsed .admin-sidebar .brand-text,
+        body.sidebar-collapsed .admin-sidebar .menu-label {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        body.sidebar-collapsed .admin-sidebar .nav-link {
+            justify-content: center;
+            padding-left: .75rem;
+            padding-right: .75rem;
+        }
+        body.sidebar-collapsed .admin-sidebar .nav-link i { margin-right: 0 !important; }
+        body.sidebar-collapsed .admin-sidebar .brand-box { margin-inline: auto; }
         .stat-card, .admin-card {
             border: 1px solid #e5e7eb;
             box-shadow: 0 14px 40px rgba(15, 23, 42, .06);
@@ -50,11 +84,38 @@
         .fade-in { animation: fadeIn .35s ease both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 991.98px) {
-            .admin-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 1050; transform: translateX(-100%); }
+            .admin-sidebar {
+                position: fixed;
+                inset: 0 auto 0 0;
+                z-index: 1050;
+                width: min(84vw, 300px);
+                flex-basis: auto;
+                transform: translateX(-100%);
+            }
             .admin-sidebar.show { transform: translateX(0); }
             .content-wrap { width: 100%; }
             .sidebar-backdrop { position: fixed; inset: 0; z-index: 1040; background: rgba(15,23,42,.5); display: none; }
             .sidebar-backdrop.show { display: block; }
+            body.sidebar-collapsed .admin-sidebar {
+                width: min(84vw, 300px);
+                flex-basis: auto;
+            }
+            body.sidebar-collapsed .content-wrap { width: 100%; }
+            body.sidebar-collapsed .admin-sidebar .brand-text,
+            body.sidebar-collapsed .admin-sidebar .menu-label {
+                width: auto;
+                opacity: 1;
+                overflow: visible;
+            }
+            body.sidebar-collapsed .admin-sidebar .nav-link {
+                justify-content: flex-start;
+                padding: .75rem .9rem;
+            }
+            body.sidebar-collapsed .admin-sidebar .brand-box { margin-inline: 0; }
+        }
+        @media (max-width: 575.98px) {
+            .topbar-title { min-width: 0; }
+            .topbar-title .small { display: none; }
         }
     </style>
     @stack('styles')
@@ -77,7 +138,7 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="d-flex align-items-center gap-3">
                     <div class="brand-box"><i class="bi bi-grid-1x2-fill"></i></div>
-                    <div>
+                    <div class="brand-text">
                         <div class="fw-bold text-white">Mosarindo</div>
                         <div class="small text-secondary">Custom CMS</div>
                     </div>
@@ -89,8 +150,8 @@
 
             <nav class="nav flex-column gap-1">
                 @foreach ($menus as $menu)
-                    <a href="{{ route($menu['route']) }}" class="nav-link {{ request()->routeIs($menu['route']) || request()->routeIs(str_replace('.index', '.*', $menu['route'])) ? 'active' : '' }}">
-                        <i class="bi {{ $menu['icon'] }} me-2"></i>{{ $menu['label'] }}
+                    <a href="{{ route($menu['route']) }}" class="nav-link {{ request()->routeIs($menu['route']) || request()->routeIs(str_replace('.index', '.*', $menu['route'])) ? 'active' : '' }}" title="{{ $menu['label'] }}">
+                        <i class="bi {{ $menu['icon'] }}"></i><span class="menu-label">{{ $menu['label'] }}</span>
                     </a>
                 @endforeach
             </nav>
@@ -101,10 +162,10 @@
             <header class="topbar sticky-top border-bottom">
                 <div class="d-flex align-items-center justify-content-between px-3 px-lg-4 py-3">
                     <div class="d-flex align-items-center gap-3">
-                        <button class="btn btn-outline-secondary d-lg-none" type="button" data-sidebar-open aria-label="Buka sidebar">
-                            <i class="bi bi-list"></i>
+                        <button class="btn btn-outline-secondary sidebar-toggle" type="button" data-sidebar-toggle aria-label="Buka tutup sidebar" aria-controls="adminSidebar" aria-expanded="false">
+                            <i class="bi bi-list fs-4"></i>
                         </button>
-                        <div>
+                        <div class="topbar-title">
                             <h1 class="h5 mb-0 fw-bold">@yield('page_title', 'Dashboard')</h1>
                             <div class="small text-secondary">@yield('page_subtitle', 'Kelola konten website')</div>
                         </div>
@@ -115,7 +176,7 @@
                         </a>
                         <div class="dropdown">
                             <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle me-2"></i>{{ auth()->user()->name }}
+                                <i class="bi bi-person-circle me-sm-2"></i><span class="d-none d-sm-inline">{{ auth()->user()->name }}</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
@@ -165,13 +226,58 @@
     <script>
         const sidebar = document.getElementById('adminSidebar');
         const backdrop = document.getElementById('sidebarBackdrop');
-        const toggleSidebar = (show) => {
+        const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
+        const mobileQuery = window.matchMedia('(max-width: 991.98px)');
+
+        const setExpanded = (expanded) => {
+            sidebarToggle?.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        };
+
+        const toggleMobileSidebar = (show) => {
             sidebar?.classList.toggle('show', show);
             backdrop?.classList.toggle('show', show);
+            document.body.style.overflow = show ? 'hidden' : '';
+            setExpanded(show);
         };
-        document.querySelector('[data-sidebar-open]')?.addEventListener('click', () => toggleSidebar(true));
-        document.querySelector('[data-sidebar-close]')?.addEventListener('click', () => toggleSidebar(false));
-        backdrop?.addEventListener('click', () => toggleSidebar(false));
+
+        const setDesktopCollapsed = (collapsed) => {
+            document.body.classList.toggle('sidebar-collapsed', collapsed);
+            localStorage.setItem('adminSidebarCollapsed', collapsed ? '1' : '0');
+            setExpanded(! collapsed);
+        };
+
+        if (! mobileQuery.matches && localStorage.getItem('adminSidebarCollapsed') === '1') {
+            document.body.classList.add('sidebar-collapsed');
+        }
+
+        sidebarToggle?.addEventListener('click', () => {
+            if (mobileQuery.matches) {
+                toggleMobileSidebar(! sidebar?.classList.contains('show'));
+                return;
+            }
+
+            setDesktopCollapsed(! document.body.classList.contains('sidebar-collapsed'));
+        });
+
+        document.querySelector('[data-sidebar-close]')?.addEventListener('click', () => toggleMobileSidebar(false));
+        backdrop?.addEventListener('click', () => toggleMobileSidebar(false));
+        sidebar?.querySelectorAll('.nav-link').forEach((link) => {
+            link.addEventListener('click', () => {
+                if (mobileQuery.matches) {
+                    toggleMobileSidebar(false);
+                }
+            });
+        });
+
+        mobileQuery.addEventListener('change', (event) => {
+            toggleMobileSidebar(false);
+            if (event.matches) {
+                document.body.classList.remove('sidebar-collapsed');
+                return;
+            }
+
+            document.body.classList.toggle('sidebar-collapsed', localStorage.getItem('adminSidebarCollapsed') === '1');
+        });
 
         document.querySelectorAll('[data-confirm-delete]').forEach((form) => {
             form.addEventListener('submit', (event) => {
