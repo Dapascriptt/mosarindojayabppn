@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutPage;
-use App\Models\HomePage;
 use App\Models\GalleryItem;
+use App\Models\HomePage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,49 +18,43 @@ class HomeController extends Controller
         $about = AboutPage::first();
         $home = HomePage::first();
         $galleryItems = GalleryItem::orderBy('created_at', 'desc')->take(4)->get()->map(function (GalleryItem $item) {
-            $images = collect($item->images ?? [])
-                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
-                ->filter()
-                ->map(function ($path) {
-                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-                        return $path;
-                    }
+            $resolveImages = function ($items) {
+                return collect($items ?? [])
+                    ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                    ->filter()
+                    ->map(function ($path) {
+                        $path = str_replace('\\', '/', (string) $path);
 
-                    return Storage::url($path);
-                })
-                ->values()
-                ->all();
+                        if (Str::startsWith($path, 'public/')) {
+                            $path = Str::after($path, 'public/');
+                        }
+
+                        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                            return $path;
+                        }
+
+                        if (Str::startsWith($path, 'storage/')) {
+                            return '/' . $path;
+                        }
+
+                        return Storage::url($path);
+                    })
+                    ->values()
+                    ->all();
+            };
+
+            $images = $resolveImages($item->images);
+            $beforeImages = $resolveImages($item->before_images);
+            $afterImages = $resolveImages($item->after_images);
 
             return [
                 'title' => $item->title,
                 'tag' => $item->tag,
                 'desc' => $item->desc,
-                'cover' => $images[0] ?? null,
+                'cover' => $beforeImages[0] ?? $afterImages[0] ?? $images[0] ?? null,
                 'images' => $images,
-                'before_images' => collect($item->before_images ?? [])
-                    ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
-                    ->filter()
-                    ->map(function ($path) {
-                        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-                            return $path;
-                        }
-
-                        return Storage::url($path);
-                    })
-                    ->values()
-                    ->all(),
-                'after_images' => collect($item->after_images ?? [])
-                    ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
-                    ->filter()
-                    ->map(function ($path) {
-                        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-                            return $path;
-                        }
-
-                        return Storage::url($path);
-                    })
-                    ->values()
-                    ->all(),
+                'before_images' => $beforeImages,
+                'after_images' => $afterImages,
             ];
         });
 

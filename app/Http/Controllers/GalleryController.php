@@ -11,44 +11,34 @@ class GalleryController extends Controller
     public function index()
     {
         $items = GalleryItem::orderBy('created_at', 'desc')->get()->map(function (GalleryItem $item) {
-            $images = collect($item->images ?? [])
-                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
-                ->filter()
-                ->map(function ($path) {
-                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-                        return $path;
-                    }
+            $resolveImages = function ($items) {
+                return collect($items ?? [])
+                    ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
+                    ->filter()
+                    ->map(function ($path) {
+                        $path = str_replace('\\', '/', (string) $path);
 
-                    return Storage::url($path);
-                })
-                ->values()
-                ->all();
+                        if (Str::startsWith($path, 'public/')) {
+                            $path = Str::after($path, 'public/');
+                        }
 
-            $beforeImages = collect($item->before_images ?? [])
-                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
-                ->filter()
-                ->map(function ($path) {
-                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-                        return $path;
-                    }
+                        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+                            return $path;
+                        }
 
-                    return Storage::url($path);
-                })
-                ->values()
-                ->all();
+                        if (Str::startsWith($path, 'storage/')) {
+                            return '/' . $path;
+                        }
 
-            $afterImages = collect($item->after_images ?? [])
-                ->map(fn ($img) => is_array($img) ? ($img['src'] ?? null) : $img)
-                ->filter()
-                ->map(function ($path) {
-                    if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-                        return $path;
-                    }
+                        return Storage::url($path);
+                    })
+                    ->values()
+                    ->all();
+            };
 
-                    return Storage::url($path);
-                })
-                ->values()
-                ->all();
+            $images = $resolveImages($item->images);
+            $beforeImages = $resolveImages($item->before_images);
+            $afterImages = $resolveImages($item->after_images);
 
             return [
                 'title' => $item->title,
