@@ -35,7 +35,10 @@
         data-gallery-desc="{{ e(data_get($item, 'desc')) }}">
         <div class="relative h-48 overflow-hidden">
           <img src="{{ $cover }}" alt="{{ data_get($item, 'title') }}"
+               loading="lazy"
+               onerror="this.classList.add('hidden'); this.nextElementSibling?.classList.remove('hidden');"
                class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]">
+          <div class="hidden h-full w-full bg-slate-200 bg-cover bg-center" style="background-image:url('{{ asset('image/hero1.png') }}')"></div>
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/15 to-transparent"></div>
           <span class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-xs font-extrabold text-slate-900 ring-1 ring-white/50">
             <span class="h-2 w-2 rounded-full bg-[rgba(219,165,84,1)]"></span>
